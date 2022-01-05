@@ -5,8 +5,8 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-z', '--zip', action='store_true', help='compress output with gzip')
-parser.add_argument('-o', '--output', help='oputput file, Default Runfile')
-parser.add_argument('-f', '--file', help='input file default omnetpp.ini')
+parser.add_argument('-o', '--output', help='output file. Default Runfile')
+parser.add_argument('-f', '--file', help='input file. Default omnetpp.ini')
 
 args = parser.parse_args()
 
@@ -45,7 +45,7 @@ cp.read(inifile)
 nrun=int(cp['General']['repeat'])
 configs=[]
 for c in cp.sections():
-    if (c.startswith('Config ') and 'Base' not in c):
+    if (c.startswith('Config ') and 'NORUN' not in c):
         configs.append(c.split()[1])
 targetlist=[]
 print('writing %d configurations with %d runs each' %(len(configs), nrun))
