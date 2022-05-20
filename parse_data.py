@@ -298,7 +298,10 @@ def init_db(conn, schema):
         descr = None
         for p in schema:
             descr = "%s, %s %s" % (descr, p, schema[p]["type"]) if descr is not None else "%s %s" % (p, schema[p]["type"])
-        c.execute('''CREATE TABLE 'scenario' (name text, run int, %s) ''' % descr)
+        if descr is None:
+            c.execute('''CREATE TABLE 'scenario' (name text, run int) ''')
+        else:
+            c.execute('''CREATE TABLE 'scenario' (name text, run int, %s) ''' % descr)
     # table values
     c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='value' ''')
     if c.fetchone()[0]!=1:
