@@ -83,6 +83,7 @@ def do_analysis(conn, analysis):
     header = None
     for p in analysis["scenarios"]["range"]:
         header = "%s\t%s" % (header, p) if header is not None else "# %s" % (p)
+    header = header if header is not None else '#' 
     for m in analysis["metrics"]:
         if m["aggr"]!='none':
             header = "%s\t%s(%s)\tsigma(%s(%s))" % (header, m["aggr"], m["metric"], m["aggr"], m["metric"]) 
