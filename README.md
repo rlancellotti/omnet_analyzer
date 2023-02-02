@@ -14,7 +14,7 @@ Script used to install the present tools in the Omnet++ directories. The Omnet++
 Tool to create files from a directory containing .mako templates. All found .mako templates will be processed.
 The name of the created file will be based on the template name, stripping the .mako extension. For example:
 - file1.ned.mako -> file1.ned
-- file2.ini.maki -> file2
+- file2.ini.mako -> file2.ini
 
 If the file already exists, the file will be re-created only if the template is newer than the file or if the *-f* switch is used.
 
