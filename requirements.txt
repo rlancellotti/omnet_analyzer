@@ -1,0 +1,5 @@
+numpy
+configparser
+mako
+pysqlite3
+PyYAML
