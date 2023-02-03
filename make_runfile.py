@@ -2,6 +2,8 @@
 import configparser
 import argparse
 from pathlib import Path
+import shutil
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-z', '--zip', action='store_true', help='compress output with gzip')
@@ -12,20 +14,29 @@ args = parser.parse_args()
 
 def get_scaname(config, run, zip=False):
     ext= 'sca.gz' if zip else 'sca'
-    return 'results/%s-\#%d.%s'%(config, run, ext)
+    return f'results/{config}-\#{run}.{ext}'
 
 def from_scaname(scaname):
     basename=Path(scaname).name.split('.')[0]
     r=basename.split('-\#')
     return (basename, r[0], r[1])
 
+def get_run_script():
+    if shutil.which('./run') is not None:
+        return './run'
+    if shutil.which('run') is not None:
+        return 'run'
+    print('cannot find "run" script')
+    sys.exit(-1)
+
+
 def write_target(f, scaname, inifile='omnetpp.ini', sleeptime=1):
     compression = scaname.endswith('.gz')
     (basename, conf, run)=from_scaname(scaname)
-    f.write('%s: %s\n' % (scaname, inifile))
-    f.write('\trm -f results/%s.sca results/%s.sca.gz results/%s.vec results/%s.vci\n'%(basename, basename, basename, basename))
-    f.write('\t./run -u Cmdenv -c %s -r %s -f %s --cmdenv-performance-display=false --cmdenv-status-frequency=60s -s\n'%(conf, run, inifile))
-    f.write('\tsleep %d\n'%sleeptime)
+    f.write(f'{scaname}: {scaname}\n')
+    f.write(f'\trm -f results/{basename}.sca results/{basename}.sca.gz results/{basename}.vec results/{basename}.vci\n')
+    f.write(f'\t{get_run_script()} -u Cmdenv -c {conf} -r {run} -f {inifile} --cmdenv-performance-display=false --cmdenv-status-frequency=60s -s\n')
+    f.write(f'\tsleep {sleeptime}\n')
     if compression:
         f.write('\tgzip %s\n'%scaname.replace('.gz',''))
     return scaname
