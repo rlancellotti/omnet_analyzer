@@ -33,7 +33,7 @@ def get_run_script():
 def write_target(f, scaname, inifile='omnetpp.ini', sleeptime=1):
     compression = scaname.endswith('.gz')
     (basename, conf, run)=from_scaname(scaname)
-    f.write(f'{scaname}: {scaname}\n')
+    f.write(f'{scaname}: {inifile}\n')
     f.write(f'\trm -f results/{basename}.sca results/{basename}.sca.gz results/{basename}.vec results/{basename}.vci\n')
     f.write(f'\t{get_run_script()} -u Cmdenv -c {conf} -r {run} -f {inifile} --cmdenv-performance-display=false --cmdenv-status-frequency=60s -s\n')
     f.write(f'\tsleep {sleeptime}\n')
