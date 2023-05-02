@@ -14,6 +14,7 @@ parser.add_argument('-f', '--force', action='store_true', help='force update')
 parser.add_argument('-r', '--recursive', action='store_true', help='enable recursive search')
 parser.add_argument('-d', '--dir', help='directory to work on, Default ./')
 parser.add_argument('-c', '--config', help='YAML Configuration file, default None')
+parser.add_argument('-t', '--template', help='.mako template to process. Default all .mako files')
 
 args = parser.parse_args()
 
@@ -58,4 +59,7 @@ def process_directory(dirname, force_update=True, recursive=False, conf=None):
 dirname = args.dir if args.dir else "."
 #print("recursive: "+str(args.recursive)+", force: "+str(args.force))
 conf = get_configuration(args.config) if args.config else None
-process_directory(dirname, force_update=(args.force or args.config), recursive=args.recursive, conf=conf)
+if args.template is None:
+    process_directory(dirname, force_update=(args.force or args.config), recursive=args.recursive, conf=conf)
+else:
+    process_template(args.template, force_update=(args.force or args.config), conf=conf)
