@@ -82,7 +82,7 @@ def do_analysis(conn, analysis):
     scenarios = get_scenarios(conn, analysis["scenarios"])
     header = None
     for p in analysis["scenarios"]["range"]:
-        header = "%s\t%s" % (header, p) if header is not None else "# %s" % (p)
+        header = "%s\t%s" % (header, p) if header is not None else "#%s" % (p)
     header = header if header is not None else '#' 
     for m in analysis["metrics"]:
         if m["aggr"]!='none':
