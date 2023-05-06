@@ -53,12 +53,16 @@ def execute_test(tname, tconf):
     for ek in env.keys():
         env[ek]=expand_env(env[ek], env)
     # setup logging
-    if 'name' in tconf['log']:
-        logname = expand_env(tconf['log']['name'], env)
-    else : logname = f'{tname}.log'
-    if 'persist' in tconf['log']:
-        logpersist = tconf['log']['persist']
-    else: logpersist = False
+    if 'log' in tconf.keys():
+        if 'name' in tconf['log']:
+            logname = expand_env(tconf['log']['name'], env)
+        else : logname = f'{tname}.log'
+        if 'persist' in tconf['log']:
+            logpersist = tconf['log']['persist']
+        else: logpersist = False
+    else:
+        logname = f'{tname}.log'
+        logpersist = False
     with open(logname, 'w') as log_handle:
         # Execute commands
         for c in tconf['commands']:
