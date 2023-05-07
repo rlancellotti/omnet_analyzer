@@ -72,7 +72,7 @@ def execute_test(tname, tconf):
         log=[]
         # Execute assertions
         for ass in tconf['expect']:
-            x=execute_assertion(ass, env)
+            x=execute_assertion(ass, env, loghandle=log_handle)
             log.append(x)
     stats=get_stats(log)
     if not logpersist and not test_has_errors(stats):
