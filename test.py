@@ -46,10 +46,12 @@ def execute_assertion(cmd, env, loghandle=None):
 def test_has_errors(stats):
     return stats[TEST_FAIL] > 0 or stats[TEST_ERR] > 0
 
-def execute_test(tname, tconf):
+def execute_test(tname, tconf, globalenv=None):
     #print(f'executing test {tname}')
     env={'testname': tname} | tconf['env']
-    # expand environment in 
+    if globalenv is not None:
+        env=globalenv | env
+    # expand environment in environment itself
     for ek in env.keys():
         env[ek]=expand_env(env[ek], env)
     # setup logging
@@ -100,13 +102,20 @@ with open(testfile, 'r') as f:
     conf=yaml.load(f, Loader=yaml.FullLoader)
     stats={}
     summary=[]
+    if 'env' in conf.keys():
+        env=conf['env']
+        # expand environment in environment itself
+        for ek in env.keys():
+            env[ek]=expand_env(env[ek], env)
+    else: env=None
     for test in conf:
-        (log, st)=execute_test(test, conf[test])
-        s=format_test_output(test, log, st)
-        print(s)
-        summary.append(s)
-        for rvk in st.keys():
-            if rvk in stats.keys(): stats[rvk] += st[rvk]
-            else: stats[rvk] = st[rvk]
+        if test != 'env':
+            (log, st)=execute_test(test, conf[test], globalenv=env)
+            s=format_test_output(test, log, st)
+            print(s)
+            summary.append(s)
+            for rvk in st.keys():
+                if rvk in stats.keys(): stats[rvk] += st[rvk]
+                else: stats[rvk] = st[rvk]
     #for s in summary: print(s)
     print(f'Global stats: {format_stats(stats)}')
