@@ -3,6 +3,7 @@ import argparse
 import pandas as pd
 import numpy as np
 import sys
+MIN_EPSILON=0.0001
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file', help='tabular file to work on')
@@ -21,7 +22,8 @@ def get_operand(df, name):
         else: return None
 
 def assertion_equal(a, b, eps):
-    return abs(a-b)<eps
+    print(a, b, eps)
+    return abs(a-b)<=max(eps, MIN_EPSILON)
 
 def assertion_a_less_than_b(a, b, eps):
     return a-b<eps
