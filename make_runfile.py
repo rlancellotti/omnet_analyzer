@@ -14,11 +14,11 @@ args = parser.parse_args()
 
 def get_scaname(config, run, zip=False):
     ext= 'sca.gz' if zip else 'sca'
-    return f'results/{config}-\#{run}.{ext}'
+    return f'results/{config}-\\#{run}.{ext}'
 
 def from_scaname(scaname):
     basename=Path(scaname).name.split('.')[0]
-    r=basename.split('-\#')
+    r=basename.split('-\\#')
     return (basename, r[0], r[1])
 
 def get_run_script():
